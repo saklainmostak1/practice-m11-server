@@ -17,11 +17,24 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
     try{
         const userCollection = client.db('nodeMongoCrud').collection('users')
+        app.get('/users', async(req, res)=>{
+            const quary = {}
+            const cursor =  userCollection.find(quary)
+            const users = await cursor.toArray()
+            res.send(users)
+
+        })
+
        app.post('/users', async (req,res) =>{
         const user = req.body
         const result = await userCollection.insertOne(user)
         res.send(result)
        })
+       app.delete('/users/:id', (req, res) =>{
+           const id = req.params.id
+           console.log('try to delete',id);
+       })
+       
     }
     finally{
 
